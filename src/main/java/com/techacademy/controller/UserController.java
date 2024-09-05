@@ -71,25 +71,16 @@ public class UserController {
         return "user/update";
     }
 
-    /** User更新処理 */
-    @PostMapping("/update/{id}/")
-    public String postUser(User user) {
-        // User登録
-        service.saveUser(user);
-        // 一覧画面にリダイレクト
-        return "redirect:/user/list";
+/** User更新処理 */
+@PostMapping("/update/{id}/")
+public String postUser(@Validated User user, BindingResult res, Model model) {
+    if (res.hasErrors()) {
+        // エラーがある場合、getUserメソッドを呼び出し、idにnullを設定
+        return getUser(null, user, res, model);
     }
-
-    /** User更新処理 */
-    @PostMapping("/update/{id}/")
-    public String postUser(@Validated User user, BindingResult res, Model model) {
-        if (res.hasErrors()) {
-            // エラーがある場合、getUserメソッドを呼び出し、idにnullを設定
-            return getUser(null, user, res, model);
-        }
-        // User登録
-        service.saveUser(user);
-        // 一覧画面にリダイレクト
-        return "redirect:/user/list";
+    // User登録
+    service.saveUser(user);
+    // 一覧画面にリダイレクト
+    return "redirect:/user/list";
     }
 }
